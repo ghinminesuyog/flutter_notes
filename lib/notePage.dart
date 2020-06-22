@@ -47,6 +47,7 @@ class _NotePageState extends State<NotePage> {
             icon: Icon(Icons.delete),
             onPressed: () {
               deleteNote(note);
+              Navigator.pop(context);
             },
           ),
           IconButton(
