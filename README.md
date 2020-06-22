@@ -1,16 +1,10 @@
 # flutter_notes
 
-A new Flutter project.
+A cross-platform mobile note-creating,saving and sharing application that works for both, Android and iOS.
 
-## Getting Started
+## Features:
+1. Allows two options to view notes: list and staggered.
+2. Saves notes to internal storage for data persistence, while also ensuring that the application runs without any data usage.
+3. The application's simplicity ensures that there are as little distractions as possible.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
