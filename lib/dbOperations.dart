@@ -45,11 +45,13 @@ getFakeNotes() async {
 }
 
 shareNote(Note note) {
-  String subject = 'Note';
-  if (note.title != '') {
-    subject = note.title;
+  if (note.content.isNotEmpty) {
+    String subject = 'Note';
+    if (note.title != '') {
+      subject = note.title;
+    }
+    Share.share(note.content, subject: subject);
   }
-  Share.share(note.content, subject: subject);
 }
 
 deleteNote(Note note) async {
