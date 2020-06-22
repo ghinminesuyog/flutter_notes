@@ -37,6 +37,7 @@ class _NotePageState extends State<NotePage> {
       note = args.note;
       titleTextController =  TextEditingController(text: note.title);
       contentTextController =  TextEditingController(text: note.content);
+      print('Id is ${note.id}');
     });
     return Scaffold(
       appBar: AppBar(

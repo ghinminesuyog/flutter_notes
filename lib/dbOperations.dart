@@ -12,7 +12,7 @@ Color getFakeSecondaryColor() {
   return Colors.amber;
 }
 
-getFutureFakeNotes(){
+getFutureFakeNotes() {
   // return null;
   return [
     Note(
@@ -39,7 +39,7 @@ getFutureFakeNotes(){
 }
 
 getFakeNotes() async {
-  var fakeNotes = await getFutureFakeNotes();
+  List<dynamic> fakeNotes = await getFutureFakeNotes();
   return fakeNotes;
 }
 
@@ -47,12 +47,22 @@ shareNote(Note note) {
   print('Sharing');
 }
 
-deleteNote(Note note) {
-  print('Deleting');
+deleteNote(Note note) async {
+  print(note);
+  List<dynamic> allNotes = await getFakeNotes();
+
+  allNotes.removeWhere((element) {
+    if (element.id == note.id) {
+      print('Deleted');
+      // print('Deleting Element is: ${element.id} and ${note.id}');
+      return true;
+    }
+    print('Element is: ${element.id} and ${note.id}');
+    return false;
+  });
+  print('the list now is: $allNotes');
 }
 
-
-
-clearLocalStrorage(){
+clearLocalStrorage() {
   print('Deleted local storage');
 }

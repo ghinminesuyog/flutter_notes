@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'dart:ui';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 class Note {
-  int id;
+  final id;
   String title;
   String content;
   DateTime dateCreated;
@@ -21,13 +23,17 @@ class Note {
   //     this.dateLastEdited,
   //     });
 
-      Note({id, title,content,dateCreated,dateLastEdited,})
-      : title = title ?? '',
-        content = content ?? '' ,
+  Note({
+    id,
+    title,
+    content,
+    dateCreated,
+    dateLastEdited,
+  })  : id = id ?? Uuid().v4(),
+        title = title ?? '',
+        content = content ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
-                dateLastEdited = dateLastEdited ?? DateTime.now()
-
-        ;
+        dateLastEdited = dateLastEdited ?? DateTime.now();
 
   Map<String, dynamic> toMap(bool forUpdate) {
     var data = {

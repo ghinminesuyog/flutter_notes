@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'globalClasses.dart';
-import 'notePage.dart';
-import 'settingsPage.dart';
 import 'dbOperations.dart';
 
 class NoteGridView extends StatefulWidget {

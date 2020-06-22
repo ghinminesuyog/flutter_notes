@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dbOperations.dart';
 import 'globalClasses.dart';
-import 'notePage.dart';
-import 'settingsPage.dart';
 
 class NoteListView extends StatefulWidget {
   @override
