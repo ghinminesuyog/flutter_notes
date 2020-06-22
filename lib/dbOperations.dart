@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'globalClasses.dart';
+import 'package:share/share.dart';
 
 Color secondaryColour = getFakePrimaryColor();
 Color primaryColour = getFakeSecondaryColor();
@@ -44,7 +45,11 @@ getFakeNotes() async {
 }
 
 shareNote(Note note) {
-  print('Sharing');
+  String subject = 'Note';
+  if (note.title != '') {
+    subject = note.title;
+  }
+  Share.share(note.content, subject: subject);
 }
 
 deleteNote(Note note) async {
