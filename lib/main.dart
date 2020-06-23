@@ -49,8 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     staggeredViewStream.stream.listen((event) {
       setState(() {
-              isStaggeredView = event;
-
+        isStaggeredView = event;
       });
       print('Stag stream $event');
     });
@@ -69,14 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           title: Text('Home'),
-          // actions: <Widget>[
-
-          // ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/note',
+          onPressed: () async {
+            await Navigator.pushNamed(context, '/note',
                 arguments: NotePageScreenArguments(note: Note()));
+            setState(() {});
           },
           child: Icon(Icons.add),
         ),

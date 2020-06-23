@@ -29,7 +29,7 @@ class _NoteGridViewState extends State<NoteGridView> {
             crossAxisSpacing: 4.0,
             staggeredTiles: _staggeredTiles(snapshot.data),
             children: List.generate(snapshot.data.length, (index) {
-              Note note = snapshot.data[index];
+              Note note = Note.fromMap(snapshot.data[index]);
               String title = note.title;
               String content = note.content;
 

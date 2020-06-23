@@ -119,22 +119,20 @@ class DBProvider {
 
   newNote(Note newNote) async {
     final db = await database;
-    print('******************* $db *******************');
     var res = await db.insert("Note", newNote.toMap());
-    print('******************* $res *******************');
     return res;
   }
 
   getAllNotes() async {
     final db = await database;
-    print('******************* $db *******************');
-
     var res = await db.query("Note");
-    print('******************* Result: $res *******************');
     return res;
-
-    // List<Note> list =
-    //     res.isNotEmpty ? res.map((c) => Note.fromMap(c)).toList() : [];
-    // return list;
   }
+
+  deleteNote(id) async{
+    final db = await database;
+    var res = await db.delete('Note',where: "id = ?", whereArgs: [id]);
+    return res;
+  }
+
 }

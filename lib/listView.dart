@@ -20,6 +20,7 @@ class _NoteListViewState extends State<NoteListView> {
     return FutureBuilder(
       future: DBProvider.db.getAllNotes(),
       builder: (context, snap) {
+
         if (snap.connectionState == ConnectionState.done && snap.hasData) {
           return ListView.builder(
               itemCount: snap.data.length,

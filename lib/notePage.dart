@@ -28,6 +28,16 @@ class _NotePageState extends State<NotePage> {
     super.dispose();
   }
 
+  _showSnackbar({@required context,@required  String message,@required  bool dismiss}) {
+    var snackBar = SnackBar(
+      content: Text(message),
+    );
+    Scaffold.of(context)
+        .showSnackBar(snackBar)
+        .closed
+        .then((value) => Navigator.pop(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     NotePageScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -38,27 +48,51 @@ class _NotePageState extends State<NotePage> {
       contentTextController = TextEditingController(text: note.content);
       print('Id is ${note.id}');
     });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(note.title),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              DBProvider.db.newNote(Note(
-                title: titleTextController.text,
-                content: contentTextController.text,
-                dateCreated: DateTime.now(),
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              deleteNote(note);
-              Navigator.pop(context);
-            },
-          ),
+          Builder(builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () {
+                if (contentTextController.text.isEmpty) {
+                  _showSnackbar(
+                      context: context,
+                      message: 'Cannot save an empty note!',
+                      dismiss: false);
+                } else {
+                  _showSnackbar(
+                      context: context, message: 'Saved!', dismiss: false);
+
+                  DBProvider.db.newNote(Note(
+                    title: titleTextController.text,
+                    content: contentTextController.text,
+                    dateCreated: DateTime.now(),
+                  ));
+                }
+              },
+            );
+          }),
+          Builder(builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                var res = await DBProvider.db.deleteNote(note.id);
+                print(res);
+                if (res == 1) {
+                  _showSnackbar(
+                      context: context, message: 'Deleted!', dismiss: true);
+                } else {
+                  _showSnackbar(
+                      context: context,
+                      message: 'Some error occured. Could not delete!',
+                      dismiss: false);
+                }
+              },
+            );
+          }),
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {
@@ -74,7 +108,7 @@ class _NotePageState extends State<NotePage> {
             controller: titleTextController,
             style: TextStyle(fontWeight: FontWeight.bold),
             minLines: 1,
-            maxLines: 99999,
+            maxLines: 10,
             autofocus: true,
             decoration: new InputDecoration.collapsed(hintText: 'Title'),
           ),
