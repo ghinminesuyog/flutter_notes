@@ -18,14 +18,14 @@ class _NoteListViewState extends State<NoteListView> {
 
   futureListView() {
     return FutureBuilder(
-      future: getFakeNotes(),
+      future: DBProvider.db.getAllNotes(),
       builder: (context, snap) {
-        if (snap.hasData) {
-            return ListView.builder(
+        if (snap.connectionState == ConnectionState.done && snap.hasData) {
+          return ListView.builder(
               itemCount: snap.data.length,
               itemBuilder: (cntxt, ind) {
-                Note note = (snap.data)[ind];
-
+                var jsonObj = (snap.data)[ind];
+                Note note = Note.fromMap(jsonObj);
                 String noteTitle = '';
                 if (note.title != null) {
                   noteTitle = note.title;
@@ -49,8 +49,8 @@ class _NoteListViewState extends State<NoteListView> {
                   child: ListTile(
                     onTap: () {
                       print('Note is ${note.title}');
-                      Navigator.pushNamed(context, '/note',arguments: NotePageScreenArguments(note: note
-                      ));
+                      Navigator.pushNamed(context, '/note',
+                          arguments: NotePageScreenArguments(note: note));
                     },
                     title: Text(noteTitle),
                     subtitle: Text(noteContent),
@@ -59,12 +59,11 @@ class _NoteListViewState extends State<NoteListView> {
                 );
               });
         } else if (snap.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else {
           return Center(
             child: Text('You do not have any notes. Go ahead and create some.'),
           );
-        
         }
       },
     );
@@ -72,11 +71,11 @@ class _NoteListViewState extends State<NoteListView> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    // Scaffold(
-        
-    //     body: 
+    return
+        // Scaffold(
+
+        //     body:
         futureListView();
-        // );
+    // );
   }
 }

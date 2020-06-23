@@ -1,11 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
-import 'dart:convert';
-import 'dart:ui';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
 
 class Note {
   final id;
@@ -13,51 +8,38 @@ class Note {
   String content;
   DateTime dateCreated;
   DateTime dateLastEdited;
-  bool isPinned = false;
+  bool isPinned;
 
-  // Note(
-  //     {this.id,
-  //     this.title,
-  //     this.content,
-  //     this.dateCreated,
-  //     this.dateLastEdited,
-  //     });
-
-  Note({
-    id,
-    title,
-    content,
-    dateCreated,
-    dateLastEdited,
-  })  : id = id ?? Uuid().v4(),
+  Note({id, title, content, dateCreated, dateLastEdited, isPinned})
+      : id = id ?? Uuid().v4(),
         title = title ?? '',
         content = content ?? '',
         dateCreated = dateCreated ?? DateTime.now(),
-        dateLastEdited = dateLastEdited ?? DateTime.now();
+        dateLastEdited = dateLastEdited ?? DateTime.now(),
+        isPinned = isPinned ?? false;
 
-  Map<String, dynamic> toMap(bool forUpdate) {
-    var data = {
-//      'id': id,  since id is auto incremented in the database we don't need to send it to the insert query.
-      'title': utf8.encode(title),
-      'content': utf8.encode(content),
-      'date_created': epochFromDate(dateCreated),
-      'date_last_edited': epochFromDate(dateLastEdited),
-      'is_pinned': isPinned //  for later use for integrating archiving
-    };
-    if (forUpdate) {
-      data["id"] = this.id;
-    }
-    return data;
-  }
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'title': title,
+        'content': content,
+        'created': dateCreated.millisecondsSinceEpoch.toString(),
+        'edited': (dateLastEdited != null)
+            ? dateLastEdited.millisecondsSinceEpoch.toString()
+            : DateTime.now(),
+        'isPinned': (isPinned == true)
+            ? 1
+            : 0 //  for later use for integrating archiving
+      };
 
-// Converting the date time object into int representing seconds passed after midnight 1st Jan, 1970 UTC
-  int epochFromDate(DateTime dt) {
-    return dt.millisecondsSinceEpoch ~/ 1000;
-  }
-
-  void pinThisNote() {
-    isPinned = true;
-  }
+  factory Note.fromMap(Map<String, dynamic> json) => new Note(
+      id: json["id"],
+      title: json["title"],
+      content: json["content"],
+      dateCreated:
+          DateTime.fromMillisecondsSinceEpoch(int.parse(json["created"])),
+      dateLastEdited:
+          DateTime.fromMillisecondsSinceEpoch(int.parse(json["edited"])),
+      isPinned: (json["isPinned"] == 0) ? false : true);
 }
 
 class MyAppDrawer extends StatefulWidget {

@@ -33,16 +33,25 @@ class _NotePageState extends State<NotePage> {
     NotePageScreenArguments args = ModalRoute.of(context).settings.arguments;
 
     setState(() {
-
       note = args.note;
-      titleTextController =  TextEditingController(text: note.title);
-      contentTextController =  TextEditingController(text: note.content);
+      titleTextController = TextEditingController(text: note.title);
+      contentTextController = TextEditingController(text: note.content);
       print('Id is ${note.id}');
     });
     return Scaffold(
       appBar: AppBar(
         title: Text(note.title),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {
+              DBProvider.db.newNote(Note(
+                title: titleTextController.text,
+                content: contentTextController.text,
+                dateCreated: DateTime.now(),
+              ));
+            },
+          ),
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {

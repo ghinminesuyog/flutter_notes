@@ -19,7 +19,7 @@ class _NoteGridViewState extends State<NoteGridView> {
 
   futureStaggered() {
     return FutureBuilder(
-      future: getFakeNotes(),
+      future: DBProvider.db.getAllNotes(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return StaggeredGridView.extent(
