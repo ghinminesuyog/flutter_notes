@@ -48,10 +48,14 @@ class _NoteListViewState extends State<NoteListView> {
                 return Container(
                   color: (ind % 2 == 0) ? Colors.white : Color(0x00FFFFFF),
                   child: ListTile(
-                    onTap: () {
+                    onTap: () async{
                       print('Note is ${note.title}');
-                      Navigator.pushNamed(context, '/note',
+                     
+                     await Navigator.pushNamed(context, '/note',
                           arguments: NotePageScreenArguments(note: note));
+                          setState(() {
+                       
+                     });
                     },
                     title: Text(noteTitle),
                     subtitle: Text(noteContent),

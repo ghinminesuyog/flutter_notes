@@ -107,7 +107,7 @@ class DBProvider {
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE Note ("
-          "id TEXT,"
+          "id TEXT PRIMARY KEY,"
           "title TEXT,"
           "content TEXT,"
           "created TEXT,"
@@ -119,6 +119,13 @@ class DBProvider {
 
   newNote(Note newNote) async {
     final db = await database;
+    // var queryResult = await db.rawQuery('SELECT * FROM tagTable WHERE id="aaa"');
+    // var query = await db.query('Note',where: "id = ?", whereArgs: [newNote.id]);
+    // print('Query: $query');
+
+
+    print('${newNote.toMap()}');
+
     var res = await db.insert("Note", newNote.toMap());
     return res;
   }

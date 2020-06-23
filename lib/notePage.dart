@@ -28,14 +28,17 @@ class _NotePageState extends State<NotePage> {
     super.dispose();
   }
 
-  _showSnackbar({@required context,@required  String message,@required  bool dismiss}) {
+  _showSnackbar(
+      {@required context, @required String message, @required bool dismiss}) {
     var snackBar = SnackBar(
       content: Text(message),
     );
-    Scaffold.of(context)
-        .showSnackBar(snackBar)
-        .closed
-        .then((value) => Navigator.pop(context));
+    if (dismiss) {
+      Scaffold.of(context)
+          .showSnackBar(snackBar)
+          .closed
+          .then((value) => Navigator.pop(context));
+    }
   }
 
   @override
@@ -67,9 +70,11 @@ class _NotePageState extends State<NotePage> {
                       context: context, message: 'Saved!', dismiss: false);
 
                   DBProvider.db.newNote(Note(
+                    id: note.id,
                     title: titleTextController.text,
                     content: contentTextController.text,
-                    dateCreated: DateTime.now(),
+                    dateLastEdited: DateTime.now(),
+                    dateCreated: note.dateCreated,
                   ));
                 }
               },
