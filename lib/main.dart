@@ -51,14 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isStaggeredView = event;
       });
-      print('Stag stream $event');
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('Is staggered? $isStaggeredView');
-
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(

@@ -49,7 +49,6 @@ class _NotePageState extends State<NotePage> {
       note = args.note;
       titleTextController = TextEditingController(text: note.title);
       contentTextController = TextEditingController(text: note.content);
-      print('Id is ${note.id}');
     });
 
     return Scaffold(
@@ -85,7 +84,6 @@ class _NotePageState extends State<NotePage> {
               icon: Icon(Icons.delete),
               onPressed: () async {
                 var res = await DBProvider.db.deleteNote(note.id);
-                print(res);
                 if (res == 1) {
                   _showSnackbar(
                       context: context, message: 'Deleted!', dismiss: true);

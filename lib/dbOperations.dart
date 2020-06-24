@@ -64,26 +64,6 @@ shareNote(Note note) {
   }
 }
 
-deleteNote(Note note) async {
-  print(note);
-  // List<dynamic> allNotes = await getFakeNotes();
-
-  // allNotes.removeWhere((element) {
-  //   if (element.id == note.id) {
-  //     print('Deleted');
-  //     // print('Deleting Element is: ${element.id} and ${note.id}');
-  //     return true;
-  //   }
-  //   print('Element is: ${element.id} and ${note.id}');
-  //   return false;
-  // });
-  // print('the list now is: $allNotes');
-}
-
-clearLocalStrorage() {
-  print('Deleted local storage');
-}
-
 class DBProvider {
   DBProvider._();
   static final DBProvider db = DBProvider._();
@@ -101,7 +81,6 @@ class DBProvider {
   }
 
   initDB() async {
-    print('Initializing db');
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "NoteDB.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
@@ -119,8 +98,6 @@ class DBProvider {
 
   newNote(Note newNote) async {
     final db = await database;
-    print('${newNote.toMap()}');
-
     try {
       var res = await db.insert("Note", newNote.toMap());
       return res;
@@ -134,7 +111,8 @@ class DBProvider {
   updateNote(Note note) async {
     final db = await database;
     try {
-      var res = await db.update('Note', note.toMap(), where: 'id = ?', whereArgs: [note.id]);
+      var res = await db
+          .update('Note', note.toMap(), where: 'id = ?', whereArgs: [note.id]);
       return res;
     } catch (err) {
       print('error is: $err');
@@ -154,6 +132,12 @@ class DBProvider {
   deleteNote(id) async {
     final db = await database;
     var res = await db.delete('Note', where: "id = ?", whereArgs: [id]);
+    return res;
+  }
+
+  deleteAllNotes() async {
+    final db = await database;
+    var res = await db.delete("Note", where: '1');
     return res;
   }
 }
