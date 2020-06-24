@@ -107,7 +107,7 @@ class DBProvider {
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE Note ("
-          "id TEXT PRIMARY KEY,"
+          "id TEXT PRIMARY KEY UNIQUE,"
           "title TEXT,"
           "content TEXT,"
           "created TEXT,"
@@ -119,15 +119,30 @@ class DBProvider {
 
   newNote(Note newNote) async {
     final db = await database;
-    // var queryResult = await db.rawQuery('SELECT * FROM tagTable WHERE id="aaa"');
-    // var query = await db.query('Note',where: "id = ?", whereArgs: [newNote.id]);
-    // print('Query: $query');
-
-
     print('${newNote.toMap()}');
 
-    var res = await db.insert("Note", newNote.toMap());
-    return res;
+    try {
+      var res = await db.insert("Note", newNote.toMap());
+      return res;
+    } catch (e) {
+      //Try updating jic the note already exists:
+      updateNote(newNote);
+      print('error is : $e');
+    }
+  }
+
+  updateNote(Note note) async {
+    final db = await database;
+    try {
+      var res = await db.update('Note', note.toMap(), where: 'id = ?', whereArgs: [note.id]);
+      return res;
+    } catch (err) {
+      print('error is: $err');
+    }
+  }
+
+  getNoteById(String id) async {
+    final db = await database;
   }
 
   getAllNotes() async {
@@ -136,10 +151,9 @@ class DBProvider {
     return res;
   }
 
-  deleteNote(id) async{
+  deleteNote(id) async {
     final db = await database;
-    var res = await db.delete('Note',where: "id = ?", whereArgs: [id]);
+    var res = await db.delete('Note', where: "id = ?", whereArgs: [id]);
     return res;
   }
-
 }

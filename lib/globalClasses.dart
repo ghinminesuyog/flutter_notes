@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class Note {
-  final id;
+  String id;
   String title;
   String content;
   DateTime dateCreated;
