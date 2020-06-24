@@ -9,6 +9,33 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  
+  _showDeleteDialog() {
+    showDialog(context: context,
+    builder: (context){
+      return AlertDialog(
+      title: Text('Are you sure?'),
+      content: Text('This will delete all your notes. This cannot be undone.'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Delete'),
+          onPressed: () {
+            DBProvider.db.deleteAllNotes();
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     List<DropdownMenuItem> viewDropDownItems = [
@@ -36,14 +63,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 onChanged: (val) {
                   setState(() {
                     CheckViewStyle.isStaggeredView = val;
-                    print('Stag view? ${CheckViewStyle.isStaggeredView}');
                     staggeredViewStream.add(val);
                   });
                 }),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             RaisedButton(
-              onPressed: clearLocalStrorage,
+              onPressed: () {
+                _showDeleteDialog();
+              },
               color: Colors.red[400],
               child: Text('Clear local storage',
                   style: TextStyle(color: Colors.white)),
