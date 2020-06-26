@@ -42,30 +42,6 @@ class Note {
       isPinned: (json["isPinned"] == 0) ? false : true);
 }
 
-class MyAppDrawer extends StatefulWidget {
-  @override
-  _MyAppDrawerState createState() => _MyAppDrawerState();
-}
-
-class _MyAppDrawerState extends State<MyAppDrawer> {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: DrawerHeader(
-        child: StreamBuilder<Object>(
-            stream: null,
-            builder: (context, snapshot) {
-              return Column(
-                children: <Widget>[
-                  Text('Notes'),
-                ],
-              );
-            }),
-      ),
-    );
-  }
-}
-
 class MyAppBar extends StatefulWidget {
   @override
   _MyAppBarState createState() => _MyAppBarState();
@@ -79,8 +55,6 @@ class _MyAppBarState extends State<MyAppBar> {
     );
   }
 }
-
-var globalDrawer = MyAppDrawer();
 
 class CheckViewStyle {
   static bool isStaggeredView = false;
