@@ -20,7 +20,6 @@ class _NoteListViewState extends State<NoteListView> {
     return FutureBuilder(
       future: DBProvider.db.getAllNotes(),
       builder: (context, snap) {
-
         if (snap.connectionState == ConnectionState.done && snap.hasData) {
           return ListView.builder(
               itemCount: snap.data.length,
@@ -48,12 +47,11 @@ class _NoteListViewState extends State<NoteListView> {
                 return Container(
                   color: (ind % 2 == 0) ? Colors.white : Color(0x00FFFFFF),
                   child: ListTile(
-                    onTap: () async{                     
-                     await Navigator.pushNamed(context, '/note',
+                    onTap: () async {
+                      await Navigator.pushNamed(context, '/note',
                           arguments: NotePageScreenArguments(note: note));
-                          setState(() {
-                       
-                     });
+                          print('Created: ${note.dateCreated} and modified: ${note.dateLastEdited}');
+                      setState(() {});
                     },
                     title: Text(noteTitle),
                     subtitle: Text(noteContent),

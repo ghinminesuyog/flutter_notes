@@ -6,6 +6,7 @@ import 'settingsPage.dart';
 // import 'package:notes/notePage.dart';
 import 'staggeredView.dart';
 import 'globalClasses.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,17 +23,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        // '/': (cntxt) => HomeScreen(),
-        // NotePage.route: (context) => NotePage(),
-
-        '/settings': (cntxt) => SettingsPage(),
+       '/settings': (cntxt) => SettingsPage(),
         '/home': (cntxt) => HomeScreen(),
         '/note': (cntxt) => NotePage(),
       },
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: HomeScreen(),
-      ),
+      home: Scaffold(body: HomeScreen()),
     );
   }
 }
@@ -47,21 +43,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    staggeredViewStream.stream.listen((event) {
-      setState(() {
-        isStaggeredView = event;
-      });
-    });
+    
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.pushNamed(context, '/settings');
+            onPressed: () async{
+              
+            var result =  await Navigator.pushNamed(context, '/settings');
+            print('Setting nav: $result');
+            setState(() {
+                
+              });
             },
           ),
           title: Text('Home'),
@@ -74,6 +72,19 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Icon(Icons.add),
         ),
-        body: (isStaggeredView) ? NoteGridView() : NoteListView());
+        body: 
+        FutureBuilder(
+          future: getViewType(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              return (snapshot.data) ? NoteGridView() : NoteListView();
+            } else {
+              print('State : ${snapshot.connectionState} Data: ${snapshot.data}' );
+              return CircularProgressIndicator();
+            }
+          },
+        )
+        );
   }
 }

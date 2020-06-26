@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'globalClasses.dart';
 import 'package:share/share.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io';
-
-import 'dart:convert';
 import 'dart:ui';
-import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
-
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -22,37 +18,6 @@ Color getFakePrimaryColor() {
 Color getFakeSecondaryColor() {
   return Colors.amber;
 }
-
-// getFutureFakeNotes() {
-//   // return null;
-//   return [
-//     Note(
-//         id: 1,
-//         title: 'Note number 1',
-//         dateCreated: DateTime.now(),
-//         dateLastEdited: DateTime.now(),
-//         content: 'Content of note 1'),
-//     Note(
-//         id: 2,
-//         title:
-//             'Note title 3 very long very very very very very very very very very very very very very very very very very very very very very very',
-//         dateCreated: DateTime.now(),
-//         dateLastEdited: DateTime.now(),
-//         content: 'Content of note 2'),
-//     Note(
-//         id: 3,
-//         title: '',
-//         dateCreated: DateTime.now(),
-//         dateLastEdited: DateTime.now(),
-//         content:
-//             'Content of note 3 \n Content of note 3 \n Content of note 3 \n Content of note 3 \n Content of note 3 \n Content of note 3 \n Content of note 3 \n')
-//   ];
-// }
-
-// getFakeNotes() async {
-//   List<dynamic> fakeNotes = await getFutureFakeNotes();
-//   return fakeNotes;
-// }
 
 shareNote(Note note) {
   if (note.content.isNotEmpty) {
@@ -95,6 +60,8 @@ class DBProvider {
           ")");
     });
   }
+
+  
 
   newNote(Note newNote) async {
     final db = await database;
@@ -140,4 +107,16 @@ class DBProvider {
     var res = await db.delete("Note", where: '1');
     return res;
   }
+}
+
+Future<bool> getViewType() async{
+  final pref = await SharedPreferences.getInstance();
+  return (pref.getBool('isStaggered')) ?? false;
+  // return true;
+}
+
+setViewType(bool isStaggered) async{
+  print('Setting to : $isStaggered');
+   final pref = await SharedPreferences.getInstance();
+  return pref.setBool('isStaggered',isStaggered);
 }

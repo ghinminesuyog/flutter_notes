@@ -9,31 +9,42 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  
-  _showDeleteDialog() {
-    showDialog(context: context,
-    builder: (context){
-      return AlertDialog(
-      title: Text('Are you sure?'),
-      content: Text('This will delete all your notes. This cannot be undone.'),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('Delete'),
-          onPressed: () {
-            DBProvider.db.deleteAllNotes();
-            Navigator.pop(context);
-          },
-        ),
-        FlatButton(
-          child: Text('Cancel'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ],
-    );
+  bool currentView = false;
+  initState() {
+    super.initState();
+    getViewType().then((value) {
+      setState(() {
+        currentView = value;
+      });
+      print(value);
     });
-    
+  }
+
+  _showDeleteDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Are you sure?'),
+            content:
+                Text('This will delete all your notes. This cannot be undone.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Delete'),
+                onPressed: () {
+                  DBProvider.db.deleteAllNotes();
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -58,12 +69,14 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: Text('View as'),
             trailing: DropdownButton(
-                value: CheckViewStyle.isStaggeredView,
+                value: currentView,
                 items: viewDropDownItems,
                 onChanged: (val) {
                   setState(() {
-                    CheckViewStyle.isStaggeredView = val;
-                    staggeredViewStream.add(val);
+                    // CheckViewStyle.isStaggeredView = val;
+                    // staggeredViewStream.add(val);
+                    setViewType(val);
+                    currentView = val;
                   });
                 }),
           ),
