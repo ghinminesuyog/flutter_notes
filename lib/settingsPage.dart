@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dbOperations.dart';
-import 'globalClasses.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

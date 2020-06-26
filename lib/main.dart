@@ -6,7 +6,6 @@ import 'settingsPage.dart';
 // import 'package:notes/notePage.dart';
 import 'staggeredView.dart';
 import 'globalClasses.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
